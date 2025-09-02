@@ -1,6 +1,9 @@
 Advanced Subscription Manager
 
-https://img.shields.io/badge/Flask-2.3.x-lightgrey?style=for-the-badge&logo=flask https://img.shields.io/badge/Python-3.6%2B-blue?style=for-the-badge&logo=python https://img.shields.io/badge/License-MIT-green?style=for-the-badge https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge
+![Flask](https://img.shields.io/badge/Flask-2.3.x-lightgrey?style=for-the-badge&logo=flask)
+![Python](https://img.shields.io/badge/Python-3.6%2B-blue?style=for-the-badge&logo=python)
+![License](https://img.shields.io/badge/License-Apache%202.0-green?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge)
 
 A powerful, secure, and web-based subscription management platform built with Flask. This application provides a dual-layer architecture: a central admin panel for administrators to manage public resources and users, and a personalized user space for creating and managing private subscription configurations.
 
