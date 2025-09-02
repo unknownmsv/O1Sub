@@ -7,8 +7,9 @@ Advanced Subscription Manager
 
 A powerful, secure, and web-based subscription management platform built with Flask. This application provides a dual-layer architecture: a central admin panel for administrators to manage public resources and users, and a personalized user space for creating and managing private subscription configurations.
 
-https://via.placeholder.com/800x400/2c3e50/ffffff?text=Advanced+Subscription+Manager+Dashboard (Screenshot of the Admin Dashboard)
+![login](https://github.storage.c2.liara.space/Screenshot_2025-09-02-17-11-48-875_com.android.chrome.png)
 
+![dashboard](https://github.storage.c2.liara.space/Screenshot_2025-09-02-17-12-15-090_com.android.chrome.png)
 ✨ Key Features
 
 🔐 Security & Administration
