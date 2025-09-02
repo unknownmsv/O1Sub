@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0e1a;
+            color: #e0e0e0;
+        }
+        .neon-text {
+            color: #4dffff;
+            text-shadow: 0 0 5px #4dffff, 0 0 10px #4dffff, 0 0 20px #00aaff, 0 0 30px #00aaff;
+        }
+        .neon-box {
+            border: 2px solid #4dffff;
+            box-shadow: 0 0 15px rgba(77, 255, 255, 0.5), inset 0 0 15px rgba(77, 255, 255, 0.3);
+        }
+        .btn-neon {
+            background-color: #4dffff;
+            color: #0a0e1a;
+            border: none;
+            box-shadow: 0 0 10px #4dffff;
+            transition: all 0.3s ease;
+        }
+        .btn-neon:hover {
+            box-shadow: 0 0 20px #4dffff, 0 0 30px #4dffff;
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background-color: #ff4d4d;
+            color: #0a0e1a;
+            border: none;
+            box-shadow: 0 0 10px #ff4d4d;
+        }
+        .btn-danger:hover {
+            box-shadow: 0 0 20px #ff4d4d;
+        }
+        .table-header {
+            background-color: rgba(77, 255, 255, 0.1);
+            border-bottom: 2px solid #4dffff;
+        }
+        .table-row {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(77, 255, 255, 0.2);
+        }
+        input, select {
+            background-color: #1a1f2e;
+            border: 1px solid #4dffff;
+            color: #e0e0e0;
+        }
+        .alert {
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0.5rem;
+            border-width: 1px;
+            font-weight: 500;
+        }
+        .alert-success { background-color: rgba(22, 163, 74, 0.2); border-color: #16a34a; color: #4ade80; }
+        .alert-error { background-color: rgba(220, 38, 38, 0.2); border-color: #dc2626; color: #f87171; }
+        .alert-warning { background-color: rgba(234, 179, 8, 0.2); border-color: #eab308; color: #facc15; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="flex justify-between items-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold neon-text">Admin Panel</h1>
+            <a href="{{ url_for('logout') }}" class="py-2 px-4 bg-red-600 rounded-md hover:bg-red-700 transition-colors font-bold">Logout</a>
+        </header>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        
+        <!-- Public Subscription Management -->
+        <section class="neon-box bg-gray-900/50 backdrop-blur-sm rounded-lg p-4 md:p-6 mb-8">
+            <h2 class="text-2xl font-bold neon-text mb-4">Manage Public Subscriptions</h2>
+            <form action="{{ url_for('add_sub') }}" method="post" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                <div class="md:col-span-2">
+                    <label for="sub_url" class="block mb-2 text-sm font-medium">Subscription URL</label>
+                    <input type="url" name="sub_url" id="sub_url" class="w-full p-2 rounded" placeholder="https://..." required>
+                </div>
+                <div>
+                    <label for="sub_type" class="block mb-2 text-sm font-medium">Type</label>
+                    <select name="sub_type" id="sub_type" class="w-full p-2 rounded">
+                        <option value="normal">Normal</option>
+                        <option value="fullnormal">Full Normal</option>
+                        <option value="fragment">Fragment</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-neon font-bold py-2 px-4 rounded w-full">Add Link</button>
+            </form>
+            <hr class="border-cyan-500/30 my-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {% for type, links in subscriptions.items() %}
+                <div>
+                    <h3 class="text-lg font-semibold text-cyan-300 mb-2 capitalize">{{ type }}</h3>
+                    <ul class="space-y-2">
+                        {% for link in links %}
+                        <li class="flex items-center justify-between bg-gray-800/50 p-2 rounded">
+                            <span class="truncate text-sm" title="{{ link }}">{{ link[:40] }}...</span>
+                            <form action="{{ url_for('delete_sub') }}" method="post">
+                                <input type="hidden" name="sub_type" value="{{ type }}">
+                                <input type="hidden" name="sub_url" value="{{ link }}">
+                                <button type="submit" class="btn-danger text-xs font-bold py-1 px-2 rounded">Delete</button>
+                            </form>
+                        </li>
+                        {% else %}
+                        <li class="text-gray-500 text-sm">No links found.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- User Management -->
+        <section class="neon-box bg-gray-900/50 backdrop-blur-sm rounded-lg p-4 md:p-6 overflow-x-auto">
+            <h2 class="text-2xl font-bold neon-text mb-4">User Management</h2>
+            <form action="{{ url_for('add_user') }}" method="post" class="flex items-end gap-4 mb-6">
+               <div>
+                   <label for="username" class="block mb-2 text-sm font-medium">New Username</label>
+                   <input type="text" name="username" id="username" class="p-2 rounded" placeholder="e.g., test-user" required>
+               </div>
+               <button type="submit" class="font-bold py-2 px-4 rounded btn-neon">Create User</button>
+            </form>
+
+            <table class="w-full text-center">
+                <thead class="table-header">
+                    <tr>
+                        <th class="p-3">Username</th>
+                        <th class="p-3">Last Seen</th>
+                        <th class="p-3">Usage (Requests)</th>
+                        <th class="p-3">Limit</th>
+                        <th class="p-3">Set Limit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for username, data in users.items() %}
+                    <tr class="table-row">
+                        <td class="p-3 font-semibold">{{ username }}</td>
+                        <td class="p-3 text-sm">{{ data.last_seen if data.last_seen else 'N/A' }}</td>
+                        <td class="p-3">
+                            {% if data.usage %}
+                                {% for sub_type, count in data.usage.items() %}
+                                    <span class="bg-gray-700 text-cyan-300 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">{{ sub_type }}: {{ count }}</span>
+                                {% endfor %}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </td>
+                        <td class="p-3">
+                            <span class="font-bold {{ 'text-green-400' if data.limit == -1 else 'text-yellow-400' }}">
+                                {{ 'Unlimited' if data.limit == -1 else data.limit }}
+                            </span>
+                        </td>
+                        <td class="p-3">
+                            <form action="{{ url_for('set_limit') }}" method="post" class="flex justify-center items-center gap-2">
+                                <input type="hidden" name="username" value="{{ username }}">
+                                <input type="number" name="limit" placeholder="-1 for unlimited" class="w-32 p-1 rounded text-center">
+                                <button type="submit" class="btn-neon font-bold py-1 px-3 rounded">Save</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="p-5 text-center text-gray-500">No users found. Create one to begin.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </div>
+</body>
+</html>
+

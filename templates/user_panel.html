@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage {{ name }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- (Styles are similar to admin panel) -->
+    <style>
+        body { background-color: #0a0e1a; color: #e0e0e0; }
+        .neon-text { color: #4dffff; text-shadow: 0 0 5px #4dffff, 0 0 10px #4dffff; }
+        .neon-box { border: 2px solid #4dffff; box-shadow: 0 0 15px rgba(77, 255, 255, 0.5); }
+        .btn-neon { background-color: #4dffff; color: #0a0e1a; box-shadow: 0 0 10px #4dffff; }
+        .btn-danger { background-color: #ff4d4d; color: #0a0e1a; box-shadow: 0 0 10px #ff4d4d; }
+        textarea { background-color: #1a1f2e; border: 1px solid #4dffff; }
+    </style>
+</head>
+<body class="p-8">
+    <div class="max-w-4xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold neon-text">Subscription Panel</h1>
+            <p class="text-xl text-cyan-400">Managing: <span class="font-mono">{{ name }}</span></p>
+        </header>
+        
+        <!-- Your Subscription URL -->
+        <section class="neon-box bg-gray-900/50 p-6 rounded-lg mb-8">
+            <h2 class="text-2xl font-bold neon-text mb-4">Your Subscription URL</h2>
+            <p class="text-gray-400 mb-2">Use this link in your client application:</p>
+            <input type="text" readonly value="{{ full_sub_url }}" class="w-full p-2 rounded-md font-mono bg-gray-800 border-gray-600">
+        </section>
+
+        <!-- Add Configs -->
+        <section class="neon-box bg-gray-900/50 p-6 rounded-lg mb-8">
+            <h2 class="text-2xl font-bold neon-text mb-4">Add Configurations</h2>
+            <form method="post">
+                <textarea name="configs" rows="5" class="w-full p-2 rounded-md font-mono" placeholder="Paste one or more configs here (vless://..., vmess://...)"></textarea>
+                <button type="submit" class="mt-4 font-bold py-2 px-5 rounded-md btn-neon">Add to Subscription</button>
+            </form>
+        </section>
+        
+        <!-- Manage & Monitor -->
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="md:col-span-2 neon-box bg-gray-900/50 p-6 rounded-lg">
+                <h2 class="text-2xl font-bold neon-text mb-4">Current Configurations ({{ sub_data.configs|length }})</h2>
+                <ul class="space-y-2 max-h-96 overflow-y-auto">
+                    {% for config in sub_data.configs %}
+                    <li class="flex items-center justify-between bg-gray-800/50 p-2 rounded-md font-mono text-sm">
+                        <span class="truncate" title="{{ config }}">{{ config[:50] }}...</span>
+                        <form action="{{ url_for('delete_config', name=name) }}" method="post">
+                            <input type="hidden" name="config" value="{{ config }}">
+                            <button type="submit" class="py-1 px-2 text-xs rounded btn-danger">Delete</button>
+                        </form>
+                    </li>
+                    {% else %}
+                    <p class="text-gray-500">No configurations added yet.</p>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="neon-box bg-gray-900/50 p-6 rounded-lg">
+                <h2 class="text-2xl font-bold neon-text mb-4">Usage Stats</h2>
+                {% if user_data %}
+                <div class="space-y-3">
+                    <p><strong>Last Seen:</strong><br>{{ user_data.last_seen if user_data.last_seen else 'N/A' }}</p>
+                    <p><strong>Total Requests:</strong><br>{{ user_data.usage.custom | default(0) }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

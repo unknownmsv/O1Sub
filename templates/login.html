@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0a0e1a; color: #e0e0e0; }
+        .neon-box { border: 2px solid #4dffff; box-shadow: 0 0 15px rgba(77, 255, 255, 0.5); }
+        .btn-neon { background-color: #4dffff; color: #0a0e1a; box-shadow: 0 0 10px #4dffff; transition: all 0.3s ease; }
+        .btn-neon:hover { box-shadow: 0 0 20px #4dffff; }
+        input { background-color: #1a1f2e; border: 1px solid #4dffff; }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md p-8 space-y-6 bg-gray-900/50 rounded-lg neon-box">
+        <h1 class="text-3xl font-bold text-center text-cyan-300">Admin Panel Login</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p class="text-red-400 text-center">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form method="post">
+            <div>
+                <label for="password" class="sr-only">Password</label>
+                <input id="password" name="password" type="password" required class="w-full px-3 py-2 text-white rounded-md" placeholder="Password">
+            </div>
+            <button type="submit" class="w-full py-2 font-bold rounded-md btn-neon">Sign In</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+    "__anonymous__": {
+        "limit": -1,
+        "usage": {
+            "normal": 5
+        },
+        "last_seen": "2025-09-02 16:15:38"
+    },
+    "unknownmsv": {
+        "limit": -1,
+        "usage": {},
+        "last_seen": null
+    },
+    "test": {
+        "limit": -1,
+        "usage": {},
+        "last_seen": null
+    }
+}

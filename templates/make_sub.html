@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Your Subscription</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- (Styles are similar to login page) -->
+    <style>
+        body { background-color: #0a0e1a; color: #e0e0e0; }
+        .neon-box { border: 2px solid #4dffff; box-shadow: 0 0 15px rgba(77, 255, 255, 0.5); }
+        .btn-neon { background-color: #4dffff; color: #0a0e1a; box-shadow: 0 0 10px #4dffff; }
+        input { background-color: #1a1f2e; border: 1px solid #4dffff; }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md p-8 space-y-6 bg-gray-900/50 rounded-lg neon-box">
+        <h1 class="text-3xl font-bold text-center text-cyan-300">Create a New Subscription</h1>
+        <p class="text-center text-gray-400">Choose a unique name. This name will be part of your subscription URL.</p>
+        <form method="post">
+            <div>
+                <label for="sub_name" class="sr-only">Subscription Name</label>
+                <input id="sub_name" name="sub_name" type="text" required class="w-full px-3 py-2 text-white rounded-md" placeholder="e.g., my-awesome-sub">
+            </div>
+            <button type="submit" class="w-full mt-4 py-2 font-bold rounded-md btn-neon">Create & Manage</button>
+        </form>
+    </div>
+</body>
+</html>
